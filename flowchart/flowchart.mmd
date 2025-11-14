@@ -1,0 +1,58 @@
+graph TD
+    Start([User Visits LUXE Website]) --> Header[Header with Logo & Navigation]
+    
+    Header --> Hero[Hero Section<br/>Spring Collection 2024]
+    
+    Hero --> CTA{Choose Action}
+    CTA --> ShopWomen[Shop Women]
+    CTA --> ShopMen[Shop Men]
+    
+    Hero --> Scroll[Scroll Down]
+    
+    Scroll --> Categories[Shop by Category]
+    Categories --> Cat1[Women<br/>1,200+ items]
+    Categories --> Cat2[Men<br/>800+ items]
+    Categories --> Cat3[Accessories<br/>500+ items]
+    
+    Scroll --> Products[New Arrivals<br/>8 Product Cards]
+    
+    Products --> ProductAction{Click Product}
+    ProductAction --> QuickView[Quick View Modal]
+    ProductAction --> ProductPage[Full Product Page]
+    
+    QuickView --> AddCart1[Add to Cart]
+    ProductPage --> AddCart2[Add to Cart]
+    
+    AddCart1 --> Cart[Shopping Cart]
+    AddCart2 --> Cart
+    
+    Scroll --> Banner[Summer Sale Banner<br/>Up to 50% Off]
+    Banner --> SalePage[Shop Sale]
+    
+    Scroll --> Brands[Featured Brands<br/>Chanel, Gucci, Prada, etc.]
+    
+    Scroll --> Footer[Footer]
+    Footer --> Links[Shop Links<br/>Customer Service<br/>Company Info]
+    Footer --> Newsletter[Newsletter Signup]
+    Footer --> Social[Social Media Links]
+    
+    Cart --> Checkout[Checkout Process]
+    Checkout --> Complete[Order Complete]
+    
+    Header --> Search[Search Products]
+    Header --> CartIcon[View Cart]
+    
+    Search --> Results[Search Results]
+    Results --> ProductAction
+    
+    CartIcon --> Cart
+    
+    style Start fill:#141414,stroke:#333,stroke-width:3px,color:#fff
+    style Hero fill:#2e2e2e,stroke:#333,stroke-width:2px,color:#fff
+    style Categories fill:#666,stroke:#333,stroke-width:2px,color:#fff
+    style Products fill:#666,stroke:#333,stroke-width:2px,color:#fff
+    style Banner fill:#2e2e2e,stroke:#333,stroke-width:2px,color:#fff
+    style Brands fill:#141414,stroke:#333,stroke-width:2px,color:#fff
+    style Footer fill:#1a1a1a,stroke:#333,stroke-width:2px,color:#fff
+    style Cart fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    style Complete fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fffP
