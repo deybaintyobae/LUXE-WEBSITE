@@ -1,7 +1,7 @@
 <?php
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header('Access-Control-Allow-Origin: http://localhost:3000');
+    header('Access-Control-Allow-Origin: http://localhost');
     header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type');
     header('Access-Control-Allow-Credentials: true');
@@ -12,27 +12,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 session_start();
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: http://localhost:3000'); // Changed from *
+header('Access-Control-Allow-Origin: http://localhost');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Credentials: true'); // Added this
+header('Access-Control-Allow-Credentials: true');
 
-if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    http_response_code(200);
-    echo json_encode([
-        'success' => true,
-        'logged_in' => true,
-        'user' => [
-            'id' => $_SESSION['user_id'],
-            'username' => $_SESSION['username'],
-            'email' => $_SESSION['email']
-        ]
-    ]);
-} else {
-    http_response_code(200);
-    echo json_encode([
-        'success' => true,
-        'logged_in' => false
-    ]);
+// Only allow POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    exit;
 }
+
+// Destroy session
+$_SESSION = array();
+
+// Destroy session cookie
+if (isset($_COOKIE[session_name()])) {
+    setcookie(session_name(), '', time() - 3600, '/');
+}
+
+// Destroy session
+session_destroy();
+
+http_response_code(200);
+echo json_encode([
+    'success' => true,
+    'message' => 'Logged out successfully'
+]);
 ?>
