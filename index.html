@@ -6,9 +6,90 @@
     <title>LUXE | Designer Fashion</title>
     
     <style>
-        /* Your existing styles remain the same - I'm keeping them as is */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        /* Add these new styles for user menu */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8f8f8;
+        }
+        
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+        }
+        
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: #141414;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: #2e2e2e;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #667eea;
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .nav-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        
         .user-menu {
             position: relative;
         }
@@ -78,6 +159,7 @@
             padding: 0.75rem 1rem;
             color: #2e2e2e;
             font-size: 0.95rem;
+            text-decoration: none;
             transition: background 0.3s ease;
         }
         
@@ -88,9 +170,9 @@
         .user-dropdown-link.logout {
             color: #ff4444;
             border-top: 1px solid #e0e0e0;
+            cursor: pointer;
         }
         
-        /* Loading indicator */
         .auth-loading {
             display: inline-block;
             width: 20px;
@@ -104,10 +186,35 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* Copy all your existing CSS here */
-        /* I'm omitting it for brevity, but keep everything from your original file */
         
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #141414;
+        }
     </style>
 </head>
 <body>
@@ -131,16 +238,6 @@
                     <path d="m21 21-4.35-4.35"/>
                 </svg>
                 
-                <div style="position: relative;">
-                    <svg class="nav-icon cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="cursor: pointer;">
-                        <path d="M9 2L7 6h10l-2-4"/>
-                        <path d="M7.68 6h8.64a2 2 0 0 1 1.95 2.38l-1.2 6A2 2 0 0 1 15.13 16H8.87a2 2 0 0 1-1.94-1.62l-1.2-6A2 2 0 0 1 7.68 6Z"/>
-                        <circle cx="9" cy="20" r="1"/>
-                        <circle cx="16" cy="20" r="1"/>
-                    </svg>
-                    <span class="cart-badge" style="display: none;">0</span>
-                </div>
-                
                 <!-- User Authentication Section -->
                 <div id="authSection">
                     <!-- Loading state -->
@@ -150,7 +247,7 @@
                     
                     <!-- Not logged in - Show login button -->
                     <div id="notLoggedIn" style="display: none;">
-                        <a href="/login.html" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">Login</a>
+                        <a href="/login.html" class="btn-primary">Login</a>
                     </div>
                     
                     <!-- Logged in - Show user menu -->
@@ -170,18 +267,21 @@
                         </div>
                     </div>
                 </div>
-                
-                <button class="menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
             </div>
         </div>
     </header>
     
-    <!-- Keep all your existing HTML content here -->
-    <!-- Hero, Categories, Products, Footer, etc. -->
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome to LUXE</h1>
+        <p>Discover Designer Fashion at Your Fingertips</p>
+    </section>
+    
+    <!-- Main Content -->
+    <section class="content">
+        <h2 class="section-title">Featured Collections</h2>
+        <p>Your shopping experience starts here...</p>
+    </section>
     
     <script>
         // ============================================
@@ -189,6 +289,9 @@
         // ============================================
         
         let currentUser = null;
+        
+        // API base URL - CHANGE THIS to match your setup
+        const API_BASE_URL = 'http://localhost/api';
         
         // Check authentication status on page load
         async function checkAuthStatus() {
@@ -202,10 +305,9 @@
             loggedIn.style.display = 'none';
             
             try {
-                // IMPORTANT: Update this path to match your folder structure
-                const response = await fetch('/api/check_session.php', {
+                const response = await fetch(`${API_BASE_URL}/check-session.php`, {
                     method: 'GET',
-                    credentials: 'include'
+                    credentials: 'include' // CRITICAL: This sends cookies
                 });
                 
                 const data = await response.json();
@@ -213,11 +315,9 @@
                 authLoading.style.display = 'none';
                 
                 if (data.logged_in && data.user) {
-                    // User is logged in
                     currentUser = data.user;
                     showLoggedInState(data.user);
                 } else {
-                    // User is not logged in
                     showLoggedOutState();
                 }
             } catch (error) {
@@ -238,15 +338,12 @@
             notLoggedIn.style.display = 'none';
             loggedIn.style.display = 'block';
             
-            // Set user initials in avatar
             const initials = user.username.substring(0, 2).toUpperCase();
             userAvatar.textContent = initials;
             
-            // Set user info
             userName.textContent = user.username;
             userEmail.textContent = user.email;
             
-            // Setup user menu toggle
             setupUserMenu();
         }
         
@@ -265,20 +362,17 @@
             const userDropdown = document.getElementById('userDropdown');
             const logoutBtn = document.getElementById('logoutBtn');
             
-            // Toggle dropdown on avatar click
             userAvatar.addEventListener('click', function(e) {
                 e.stopPropagation();
                 userDropdown.classList.toggle('active');
             });
             
-            // Close dropdown when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.user-menu')) {
                     userDropdown.classList.remove('active');
                 }
             });
             
-            // Logout functionality
             logoutBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 await handleLogout();
@@ -288,10 +382,9 @@
         // Handle logout
         async function handleLogout() {
             try {
-                // IMPORTANT: Update this path to match your folder structure
-                const response = await fetch('/api/logout.php', {
+                const response = await fetch(`${API_BASE_URL}/logout.php`, {
                     method: 'POST',
-                    credentials: 'include'
+                    credentials: 'include' // CRITICAL: This sends cookies
                 });
                 
                 const data = await response.json();
@@ -301,7 +394,6 @@
                     showNotification('Logged out successfully');
                     showLoggedOutState();
                     
-                    // Optional: Redirect to home or login page
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 1000);
@@ -312,24 +404,7 @@
             }
         }
         
-        // ============================================
-        // INITIALIZE ON PAGE LOAD
-        // ============================================
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication status
-            checkAuthStatus();
-            
-            // Your existing initialization code here
-            // initializeEventListeners();
-            // loadCartFromStorage();
-            // updateCartUI();
-        });
-        
-        // ============================================
-        // NOTIFICATION SYSTEM (from your existing code)
-        // ============================================
-        
+        // Notification system
         function showNotification(message) {
             const notification = document.createElement('div');
             notification.style.cssText = `
@@ -343,21 +418,14 @@
                 box-shadow: 0 10px 30px rgba(0,0,0,0.3);
                 z-index: 9999;
                 animation: slideIn 0.3s ease;
-                max-width: 300px;
             `;
             notification.textContent = message;
             
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes slideIn {
-                    from {
-                        transform: translateX(400px);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(0);
-                        opacity: 1;
-                    }
+                    from { transform: translateX(400px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
                 }
             `;
             document.head.appendChild(style);
@@ -374,10 +442,10 @@
             }, 3000);
         }
         
-        // ============================================
-        // Keep all your existing JavaScript here
-        // Cart functions, modal functions, etc.
-        // ============================================
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+        });
     </script>
     
 </body>

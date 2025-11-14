@@ -277,6 +277,9 @@
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const passwordStrengthBar = document.getElementById('passwordStrengthBar');
         
+        // API base URL - CHANGE THIS to match your setup
+        const API_BASE_URL = 'http://localhost/api';
+        
         // Password strength indicator
         passwordInput.addEventListener('input', function() {
             const password = this.value;
@@ -372,7 +375,6 @@
                 return;
             }
             
-            // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loading-spinner"></span>Creating account...';
             
@@ -385,12 +387,12 @@
             };
             
             try {
-                // IMPORTANT: Update this path to match your folder structure
-                const response = await fetch('/api/register.php', {
+                const response = await fetch(`${API_BASE_URL}/register.php`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    credentials: 'include', // CRITICAL: This sends/receives cookies
                     body: JSON.stringify(formData)
                 });
                 
@@ -407,6 +409,7 @@
                     submitBtn.textContent = 'Create Account';
                 }
             } catch (error) {
+                console.error('Registration error:', error);
                 showAlert('An error occurred. Please try again.', 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Create Account';

@@ -260,6 +260,9 @@
         const usernameOrEmailInput = document.getElementById('usernameOrEmail');
         const passwordInput = document.getElementById('password');
         
+        // API base URL - CHANGE THIS to match your setup
+        const API_BASE_URL = 'http://localhost/api';
+        
         function showAlert(message, type) {
             alertBox.textContent = message;
             alertBox.className = 'alert show alert-' + type;
@@ -312,7 +315,6 @@
                 return;
             }
             
-            // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loading-spinner"></span>Signing in...';
             
@@ -322,12 +324,12 @@
             };
             
             try {
-                // IMPORTANT: Update this path to match your folder structure
-                const response = await fetch('/api/login.php', {
+                const response = await fetch(`${API_BASE_URL}/login.php`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    credentials: 'include', // CRITICAL: This sends/receives cookies
                     body: JSON.stringify(formData)
                 });
                 
@@ -344,6 +346,7 @@
                     submitBtn.textContent = 'Sign In';
                 }
             } catch (error) {
+                console.error('Login error:', error);
                 showAlert('An error occurred. Please try again.', 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Sign In';
