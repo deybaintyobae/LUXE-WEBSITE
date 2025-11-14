@@ -43,7 +43,7 @@ class User {
 
             // Insert user
             $query = "INSERT INTO {$this->table} (username, email, password, full_name) 
-                      VALUES (:username, :email, :password, :full_name)";
+                        VALUES (:username, :email, :password, :full_name)";
             
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':username', $username);
