@@ -277,8 +277,8 @@
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const passwordStrengthBar = document.getElementById('passwordStrengthBar');
         
-        // API base URL - CHANGE THIS to match your setup
-        const API_BASE_URL = 'http://localhost/LUXE-WEBSITE/api';
+        // Using relative path - works for any folder structure!
+        const API_BASE_URL = './api';
         
         // Password strength indicator
         passwordInput.addEventListener('input', function() {
@@ -401,7 +401,7 @@
                 if (data.success) {
                     showAlert('Registration successful! Redirecting to login...', 'success');
                     setTimeout(() => {
-                        window.location.href = '/login.html';
+                        window.location.href = 'login.html';
                     }, 2000);
                 } else {
                     showAlert(data.message || 'Registration failed. Please try again.', 'error');

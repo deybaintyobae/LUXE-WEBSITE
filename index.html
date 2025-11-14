@@ -222,7 +222,7 @@
     <!-- Header Navigation -->
     <header class="header">
         <div class="header-inner">
-            <a href="/" class="brand">LUXE</a>
+            <a href="index.html" class="brand">LUXE</a>
             
             <nav class="nav-menu">
                 <a href="#" class="nav-link">New Arrivals</a>
@@ -247,7 +247,7 @@
                     
                     <!-- Not logged in - Show login button -->
                     <div id="notLoggedIn" style="display: none;">
-                        <a href="/login.html" class="btn-primary">Login</a>
+                        <a href="login.html" class="btn-primary">Login</a>
                     </div>
                     
                     <!-- Logged in - Show user menu -->
@@ -290,8 +290,10 @@
         
         let currentUser = null;
         
-        // API base URL - CHANGE THIS to match your setup
-        const API_BASE_URL = 'http://localhost/LUXE-WEBSITE/api';
+        // API base URL - UPDATE THIS to match your folder structure
+        // Example: if in htdocs/luxe-website/, use 'http://localhost/luxe-website/api'
+        // Example: if directly in htdocs/, use 'http://localhost/api'
+        const API_BASE_URL = './api';  // Using relative path - works for any setup!
         
         // Check authentication status on page load
         async function checkAuthStatus() {
@@ -395,7 +397,7 @@
                     showLoggedOutState();
                     
                     setTimeout(() => {
-                        window.location.href = '/';
+                        window.location.href = 'index.html';
                     }, 1000);
                 }
             } catch (error) {

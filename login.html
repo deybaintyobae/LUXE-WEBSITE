@@ -260,8 +260,8 @@
         const usernameOrEmailInput = document.getElementById('usernameOrEmail');
         const passwordInput = document.getElementById('password');
         
-        // API base URL - CHANGE THIS to match your setup
-        const API_BASE_URL = 'http://localhost/LUXE-WEBSITE/api';
+        // Using relative path - works for any folder structure!
+        const API_BASE_URL = './api';
         
         function showAlert(message, type) {
             alertBox.textContent = message;
@@ -338,7 +338,7 @@
                 if (data.success) {
                     showAlert('Login successful! Redirecting...', 'success');
                     setTimeout(() => {
-                        window.location.href = '/index.html';
+                        window.location.href = 'index.html';
                     }, 1500);
                 } else {
                     showAlert(data.message || 'Login failed. Please try again.', 'error');
