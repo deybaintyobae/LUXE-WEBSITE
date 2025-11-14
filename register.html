@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | LUXE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .brand-logo {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: #141414;
+            margin-bottom: 10px;
+        }
+        
+        .register-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #2e2e2e;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2e2e2e;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-input.error {
+            border-color: #ff4757;
+        }
+        
+        .error-message {
+            color: #ff4757;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #ff4757;
+        }
+        
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #ffa502;
+        }
+        
+        .password-strength-bar.strong {
+            width: 100%;
+            background: #26de81;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="brand-logo">LUXE</div>
+        <h2 class="register-title">Create Account</h2>
+        
+        <div id="alertBox" class="alert"></div>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label class="form-label" for="fullName">Full Name (Optional)</label>
+                <input type="text" id="fullName" class="form-input" placeholder="John Doe">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="username">Username *</label>
+                <input type="text" id="username" class="form-input" placeholder="Choose a username" required>
+                <div id="usernameError" class="error-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="email">Email *</label>
+                <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                <div id="emailError" class="error-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password *</label>
+                <input type="password" id="password" class="form-input" placeholder="Min. 8 characters" required>
+                <div class="password-strength">
+                    <div id="passwordStrengthBar" class="password-strength-bar"></div>
+                </div>
+                <div id="passwordError" class="error-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirm Password *</label>
+                <input type="password" id="confirmPassword" class="form-input" placeholder="Re-enter password" required>
+                <div id="confirmPasswordError" class="error-message"></div>
+            </div>
+            
+            <button type="submit" id="submitBtn" class="btn-submit">Create Account</button>
+        </form>
+        
+        <div class="form-footer">
+            Already have an account? <a href="login.html">Sign In</a>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('registerForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const alertBox = document.getElementById('alertBox');
+        
+        const fullNameInput = document.getElementById('fullName');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+        
+        // Password strength indicator
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            const strength = calculatePasswordStrength(password);
+            
+            passwordStrengthBar.className = 'password-strength-bar';
+            if (strength >= 3) {
+                passwordStrengthBar.classList.add('strong');
+            } else if (strength >= 2) {
+                passwordStrengthBar.classList.add('medium');
+            } else if (strength >= 1) {
+                passwordStrengthBar.classList.add('weak');
+            }
+        });
+        
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            return strength;
+        }
+        
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.remove('show');
+                el.textContent = '';
+            });
+            document.querySelectorAll('.form-input').forEach(el => {
+                el.classList.remove('error');
+            });
+            
+            // Username validation
+            const username = usernameInput.value.trim();
+            if (username.length < 3) {
+                showError('username', 'Username must be at least 3 characters');
+                isValid = false;
+            } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                showError('username', 'Username can only contain letters, numbers, and underscores');
+                isValid = false;
+            }
+            
+            // Email validation
+            const email = emailInput.value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Password validation
+            const password = passwordInput.value;
+            if (password.length < 8) {
+                showError('password', 'Password must be at least 8 characters');
+                isValid = false;
+            }
+            
+            // Confirm password validation
+            const confirmPassword = confirmPasswordInput.value;
+            if (password !== confirmPassword) {
+                showError('confirmPassword', 'Passwords do not match');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function showError(fieldName, message) {
+            const input = document.getElementById(fieldName);
+            const error = document.getElementById(fieldName + 'Error');
+            input.classList.add('error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+        
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = 'alert show alert-' + type;
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Form submission
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Creating account...';
+            
+            const formData = {
+                username: usernameInput.value.trim(),
+                email: emailInput.value.trim(),
+                password: passwordInput.value,
+                confirm_password: confirmPasswordInput.value,
+                full_name: fullNameInput.value.trim() || null
+            };
+            
+            try {
+                // IMPORTANT: Update this path to match your folder structure
+                const response = await fetch('/api/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Registration successful! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                } else {
+                    showAlert(data.message || 'Registration failed. Please try again.', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Account';
+                }
+            } catch (error) {
+                showAlert('An error occurred. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+            }
+        });
+    </script>
+</body>
+</html>
