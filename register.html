@@ -13,7 +13,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: black;
+            background: #000000;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -56,7 +56,7 @@
         .brand-logo {
             width: 80px;
             height: 80px;
-            background: black;
+            background: #000000;
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -64,7 +64,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             color: #fff;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         
         .brand-name {
@@ -106,9 +106,9 @@
         
         .form-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #000000;
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
         }
         
         .form-input.error {
@@ -130,7 +130,7 @@
         .btn-submit {
             width: 100%;
             padding: 1rem;
-            background: black;
+            background: #000000;
             color: #fff;
             font-size: 1.05rem;
             font-weight: 600;
@@ -139,12 +139,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 0.5rem;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .btn-submit:hover {
+            background: #333333;
             transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
         }
         
         .btn-submit:active {
@@ -166,14 +167,14 @@
         }
         
         .form-footer a {
-            color: #667eea;
+            color: #000000;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
         }
         
         .form-footer a:hover {
-            color: #764ba2;
+            color: #666666;
         }
         
         .alert {
@@ -279,9 +280,7 @@
     <div class="register-container">
         <div class="brand-header">
             <div class="brand-logo-container">
-                <div class="brand-logo">
-                    <img src="https://github.com/deybaintyobae/Luxe-Designer-Collectives/blob/5e2c980830727fe6ed6d9dd1e5844fa94c4fa6d0/main/logo.ico" alt="">
-                </div>
+                <div class="brand-logo"><img src="/src/img/luxe-logo.png" style="width:100%;height:100%;object-fit:contain;"></div>
             </div>
             <div class="brand-name">LUXE</div>
             <h2 class="register-title">Create Account</h2>
