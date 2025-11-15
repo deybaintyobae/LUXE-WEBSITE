@@ -72,20 +72,25 @@ class User {
         }
     }
 
-    // Login user
+    // Login user - FIXED VERSION
     public function login($username_or_email, $password) {
         try {
+            // FIXED: Use two separate parameters for username and email
             $query = "SELECT * FROM {$this->table} 
-                      WHERE (username = :identifier OR email = :identifier) 
+                      WHERE (username = :username OR email = :email) 
                       AND is_active = 1 
                       LIMIT 1";
             
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':identifier', $username_or_email);
+            
+            // Bind both parameters with the same value
+            $stmt->bindParam(':username', $username_or_email);
+            $stmt->bindParam(':email', $username_or_email);
+            
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 // Verify password
                 if (password_verify($password, $row['password'])) {
@@ -171,7 +176,7 @@ class User {
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-            return $stmt->fetch();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         }
         
         return null;
