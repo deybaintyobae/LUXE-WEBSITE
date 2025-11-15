@@ -6,88 +6,161 @@
     <title>LUXE | Designer Fashion</title>
     
     <style>
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fcfcfc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: #141414;
+            animation: fadeInOut 1.5s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f8f8f8;
+            background-color: #fcfcfc;
+            color: #2e2e2e;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .header {
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            padding: 1rem 2rem;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(252, 252, 252, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
         }
         
         .header-inner {
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 1rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
         }
         
         .brand {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.1em;
             color: #141414;
             text-decoration: none;
         }
         
         .nav-menu {
-            display: flex;
+            display: none;
             gap: 2rem;
         }
         
+        @media (min-width: 768px) {
+            .nav-menu {
+                display: flex;
+            }
+        }
+        
         .nav-link {
-            color: #2e2e2e;
-            text-decoration: none;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: color 0.3s;
+            color: #2e2e2e;
+            position: relative;
+            transition: color 0.3s ease;
+            text-decoration: none;
         }
         
         .nav-link:hover {
-            color: #667eea;
+            color: #141414;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #141414;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
         }
         
         .nav-actions {
             display: flex;
-            align-items: center;
             gap: 1.5rem;
+            align-items: center;
         }
         
         .nav-icon {
             width: 24px;
             height: 24px;
-            stroke-width: 2;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: opacity 0.3s ease;
         }
         
         .nav-icon:hover {
-            transform: scale(1.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
+            opacity: 0.7;
         }
         
         .user-menu {
@@ -95,8 +168,8 @@
         }
         
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
@@ -118,9 +191,9 @@
             top: calc(100% + 10px);
             right: 0;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            min-width: 200px;
+            min-width: 220px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
@@ -135,7 +208,7 @@
         }
         
         .user-dropdown-header {
-            padding: 1rem;
+            padding: 1.25rem;
             border-bottom: 1px solid #e0e0e0;
         }
         
@@ -156,7 +229,7 @@
         
         .user-dropdown-link {
             display: block;
-            padding: 0.75rem 1rem;
+            padding: 0.75rem 1.25rem;
             color: #2e2e2e;
             font-size: 0.95rem;
             text-decoration: none;
@@ -171,6 +244,23 @@
             color: #ff4444;
             border-top: 1px solid #e0e0e0;
             cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 0.625rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
         
         .auth-loading {
@@ -188,41 +278,141 @@
         }
         
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            min-height: 600px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            margin-top: 70px;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .hero-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.1));
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
             color: #fff;
-            padding: 6rem 2rem;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .content {
-            max-width: 1400px;
-            margin: 4rem auto;
             padding: 0 2rem;
         }
         
-        .section-title {
-            font-size: 2rem;
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 300;
             margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+        
+        .btn-secondary:hover {
+            background: #fff;
             color: #141414;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #141414;
+        }
+        
+        .section-description {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 767px) {
+            .nav-menu {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
     
-    <!-- Header Navigation -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">LUXE</div>
+    </div>
+    
     <header class="header">
         <div class="header-inner">
-            <a href="index.html" class="brand">LUXE</a>
+            <div class="brand-container">
+                <div class="brand-logo">L</div>
+                <a href="index.html" class="brand">LUXE</a>
+            </div>
             
             <nav class="nav-menu">
                 <a href="#" class="nav-link">New Arrivals</a>
@@ -238,19 +428,15 @@
                     <path d="m21 21-4.35-4.35"/>
                 </svg>
                 
-                <!-- User Authentication Section -->
                 <div id="authSection">
-                    <!-- Loading state -->
                     <div id="authLoading" style="display: none;">
                         <div class="auth-loading"></div>
                     </div>
                     
-                    <!-- Not logged in - Show login button -->
                     <div id="notLoggedIn" style="display: none;">
                         <a href="login.html" class="btn-primary">Login</a>
                     </div>
                     
-                    <!-- Logged in - Show user menu -->
                     <div id="loggedIn" style="display: none;" class="user-menu">
                         <div class="user-avatar" id="userAvatar">U</div>
                         <div class="user-dropdown" id="userDropdown">
@@ -271,37 +457,53 @@
         </div>
     </header>
     
-    <!-- Hero Section -->
     <section class="hero">
-        <h1>Welcome to LUXE</h1>
-        <p>Discover Designer Fashion at Your Fingertips</p>
+        <div class="hero-bg">
+            <video autoplay muted loop playsinline>
+                <source src="/src/vid/_video_duration_8s_202511051101.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">SPRING COLLECTION 2025</h1>
+                <p class="hero-subtitle">Discover the latest trends in luxury fashion</p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-primary">Shop Women</a>
+                    <a href="#" class="btn btn-secondary">Shop Men</a>
+                </div>
+            </div>
+        </div>
     </section>
     
-    <!-- Main Content -->
-    <section class="content">
-        <h2 class="section-title">Featured Collections</h2>
-        <p>Your shopping experience starts here...</p>
+    <section style="padding: 5rem 0; background: #f8f8f8;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Welcome to LUXE</h2>
+                <p class="section-description">Your destination for designer fashion and luxury lifestyle</p>
+            </div>
+        </div>
     </section>
     
     <script>
-        // ============================================
-        // AUTHENTICATION SYSTEM
-        // ============================================
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
         
         let currentUser = null;
+        const API_BASE_URL = './api';
         
-        // API base URL - UPDATE THIS to match your folder structure
-        // Example: if in htdocs/luxe-website/, use 'http://localhost/luxe-website/api'
-        // Example: if directly in htdocs/, use 'http://localhost/api'
-        const API_BASE_URL = './api';  // Using relative path - works for any setup!
-        
-        // Check authentication status on page load
         async function checkAuthStatus() {
             const authLoading = document.getElementById('authLoading');
             const notLoggedIn = document.getElementById('notLoggedIn');
             const loggedIn = document.getElementById('loggedIn');
             
-            // Show loading
             authLoading.style.display = 'block';
             notLoggedIn.style.display = 'none';
             loggedIn.style.display = 'none';
@@ -309,11 +511,10 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/check-session.php`, {
                     method: 'GET',
-                    credentials: 'include' // CRITICAL: This sends cookies
+                    credentials: 'include'
                 });
                 
                 const data = await response.json();
-                
                 authLoading.style.display = 'none';
                 
                 if (data.logged_in && data.user) {
@@ -329,7 +530,6 @@
             }
         }
         
-        // Show logged in state
         function showLoggedInState(user) {
             const notLoggedIn = document.getElementById('notLoggedIn');
             const loggedIn = document.getElementById('loggedIn');
@@ -342,14 +542,12 @@
             
             const initials = user.username.substring(0, 2).toUpperCase();
             userAvatar.textContent = initials;
-            
             userName.textContent = user.username;
             userEmail.textContent = user.email;
             
             setupUserMenu();
         }
         
-        // Show logged out state
         function showLoggedOutState() {
             const notLoggedIn = document.getElementById('notLoggedIn');
             const loggedIn = document.getElementById('loggedIn');
@@ -358,7 +556,6 @@
             loggedIn.style.display = 'none';
         }
         
-        // Setup user menu dropdown
         function setupUserMenu() {
             const userAvatar = document.getElementById('userAvatar');
             const userDropdown = document.getElementById('userDropdown');
@@ -381,12 +578,11 @@
             });
         }
         
-        // Handle logout
         async function handleLogout() {
             try {
                 const response = await fetch(`${API_BASE_URL}/logout.php`, {
                     method: 'POST',
-                    credentials: 'include' // CRITICAL: This sends cookies
+                    credentials: 'include'
                 });
                 
                 const data = await response.json();
@@ -395,7 +591,6 @@
                     currentUser = null;
                     showNotification('Logged out successfully');
                     showLoggedOutState();
-                    
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
@@ -406,7 +601,6 @@
             }
         }
         
-        // Notification system
         function showNotification(message) {
             const notification = document.createElement('div');
             notification.style.cssText = `
@@ -431,7 +625,6 @@
                 }
             `;
             document.head.appendChild(style);
-            
             document.body.appendChild(notification);
             
             setTimeout(() => {
@@ -444,7 +637,6 @@
             }, 3000);
         }
         
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             checkAuthStatus();
         });

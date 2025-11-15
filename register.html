@@ -23,12 +23,12 @@
         
         .register-container {
             background: #fff;
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 450px;
-            padding: 40px;
-            animation: slideUp 0.5s ease;
+            max-width: 520px;
+            padding: 3rem;
+            animation: slideUp 0.6s ease;
         }
         
         @keyframes slideUp {
@@ -42,24 +42,47 @@
             }
         }
         
-        .brand-logo {
+        .brand-header {
             text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .brand-logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .brand-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .brand-name {
             font-size: 2.5rem;
             font-weight: 700;
             letter-spacing: 0.2em;
             color: #141414;
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
         }
         
         .register-title {
-            text-align: center;
             font-size: 1.5rem;
             color: #2e2e2e;
-            margin-bottom: 30px;
+            font-weight: 600;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.25rem;
         }
         
         .form-label {
@@ -67,33 +90,36 @@
             font-size: 0.9rem;
             font-weight: 600;
             color: #2e2e2e;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
         }
         
         .form-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 1rem 1.25rem;
             font-size: 1rem;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             font-family: inherit;
+            background: #f8f8f8;
         }
         
         .form-input:focus {
             outline: none;
             border-color: #667eea;
+            background: #fff;
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
         
         .form-input.error {
             border-color: #ff4757;
+            background: #fff5f5;
         }
         
         .error-message {
             color: #ff4757;
             font-size: 0.85rem;
-            margin-top: 8px;
+            margin-top: 0.5rem;
             display: none;
         }
         
@@ -103,21 +129,22 @@
         
         .btn-submit {
             width: 100%;
-            padding: 14px;
+            padding: 1rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
         }
         
         .btn-submit:active {
@@ -128,11 +155,12 @@
             background: #ccc;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
         
         .form-footer {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 2rem;
             color: #666;
             font-size: 0.95rem;
         }
@@ -141,18 +169,31 @@
             color: #667eea;
             text-decoration: none;
             font-weight: 600;
+            transition: color 0.3s ease;
         }
         
         .form-footer a:hover {
-            text-decoration: underline;
+            color: #764ba2;
         }
         
         .alert {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
             font-size: 0.9rem;
             display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .alert.show {
@@ -175,7 +216,7 @@
             height: 4px;
             background: #e0e0e0;
             border-radius: 2px;
-            margin-top: 8px;
+            margin-top: 0.5rem;
             overflow: hidden;
         }
         
@@ -183,6 +224,7 @@
             height: 100%;
             width: 0;
             transition: all 0.3s ease;
+            border-radius: 2px;
         }
         
         .password-strength-bar.weak {
@@ -215,36 +257,57 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .register-container {
+                padding: 2rem 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="register-container">
-        <div class="brand-logo">LUXE</div>
-        <h2 class="register-title">Create Account</h2>
+        <div class="brand-header">
+            <div class="brand-logo-container">
+                <div class="brand-logo">L</div>
+            </div>
+            <div class="brand-name">LUXE</div>
+            <h2 class="register-title">Create Account</h2>
+        </div>
         
         <div id="alertBox" class="alert"></div>
         
         <form id="registerForm">
             <div class="form-group">
-                <label class="form-label" for="fullName">Full Name (Optional)</label>
-                <input type="text" id="fullName" class="form-input" placeholder="John Doe">
+                <label class="form-label" for="fullName">Full Name <span style="color: #999;">(Optional)</span></label>
+                <input type="text" id="fullName" class="form-input" placeholder="John Doe" autocomplete="name">
             </div>
             
             <div class="form-group">
                 <label class="form-label" for="username">Username *</label>
-                <input type="text" id="username" class="form-input" placeholder="Choose a username" required>
+                <input type="text" id="username" class="form-input" placeholder="Choose a username" required autocomplete="username">
                 <div id="usernameError" class="error-message"></div>
             </div>
             
             <div class="form-group">
-                <label class="form-label" for="email">Email *</label>
-                <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                <label class="form-label" for="email">Email Address *</label>
+                <input type="email" id="email" class="form-input" placeholder="your@email.com" required autocomplete="email">
                 <div id="emailError" class="error-message"></div>
             </div>
             
             <div class="form-group">
                 <label class="form-label" for="password">Password *</label>
-                <input type="password" id="password" class="form-input" placeholder="Min. 8 characters" required>
+                <input type="password" id="password" class="form-input" placeholder="Min. 8 characters" required autocomplete="new-password">
                 <div class="password-strength">
                     <div id="passwordStrengthBar" class="password-strength-bar"></div>
                 </div>
@@ -253,7 +316,7 @@
             
             <div class="form-group">
                 <label class="form-label" for="confirmPassword">Confirm Password *</label>
-                <input type="password" id="confirmPassword" class="form-input" placeholder="Re-enter password" required>
+                <input type="password" id="confirmPassword" class="form-input" placeholder="Re-enter password" required autocomplete="new-password">
                 <div id="confirmPasswordError" class="error-message"></div>
             </div>
             
@@ -269,18 +332,14 @@
         const form = document.getElementById('registerForm');
         const submitBtn = document.getElementById('submitBtn');
         const alertBox = document.getElementById('alertBox');
-        
         const fullNameInput = document.getElementById('fullName');
         const usernameInput = document.getElementById('username');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const passwordStrengthBar = document.getElementById('passwordStrengthBar');
-        
-        // Using relative path - works for any folder structure!
         const API_BASE_URL = './api';
         
-        // Password strength indicator
         passwordInput.addEventListener('input', function() {
             const password = this.value;
             const strength = calculatePasswordStrength(password);
@@ -304,11 +363,9 @@
             return strength;
         }
         
-        // Form validation
         function validateForm() {
             let isValid = true;
             
-            // Clear previous errors
             document.querySelectorAll('.error-message').forEach(el => {
                 el.classList.remove('show');
                 el.textContent = '';
@@ -317,7 +374,6 @@
                 el.classList.remove('error');
             });
             
-            // Username validation
             const username = usernameInput.value.trim();
             if (username.length < 3) {
                 showError('username', 'Username must be at least 3 characters');
@@ -327,21 +383,18 @@
                 isValid = false;
             }
             
-            // Email validation
             const email = emailInput.value.trim();
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 showError('email', 'Please enter a valid email address');
                 isValid = false;
             }
             
-            // Password validation
             const password = passwordInput.value;
             if (password.length < 8) {
                 showError('password', 'Password must be at least 8 characters');
                 isValid = false;
             }
             
-            // Confirm password validation
             const confirmPassword = confirmPasswordInput.value;
             if (password !== confirmPassword) {
                 showError('confirmPassword', 'Passwords do not match');
@@ -367,7 +420,6 @@
             }, 5000);
         }
         
-        // Form submission
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -392,7 +444,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    credentials: 'include', // CRITICAL: This sends/receives cookies
+                    credentials: 'include',
                     body: JSON.stringify(formData)
                 });
                 
