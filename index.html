@@ -782,7 +782,9 @@
     <header class="header">
         <div class="header-inner">
             <div class="brand-container" onclick="window.location.href='index.html'">
-                <div class="brand-logo"><img src="https://raw.githubusercontent.com/deybaintyobae/LUXE-WEBSITE/refs/heads/main/src/img/logo.ico" style="width:100%;height:100%;object-fit:contain;border-radius:100px;;"></div>
+                <div class="brand-logo">
+                    <img src="https://raw.githubusercontent.com/deybaintyobae/LUXE-WEBSITE/refs/heads/main/src/img/logo.ico" style="width:100%;height:100%;object-fit:contain;border-radius: 100px;">
+                </div>
                 <div class="brand">LUXE</div>
             </div>
             
@@ -1198,7 +1200,8 @@
                     alert('Your cart is empty!');
                     return;
                 }
-                alert('Checkout functionality would be implemented here.\n\nTotal: ' + cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2));
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+                alert('Checkout functionality would be implemented here.\n\nTotal: $' + total);
             });
             
             // Navigation
@@ -1239,7 +1242,7 @@
             
             switch(action) {
                 case 'account':
-                    alert('My Account page would open here.\n\nUser: ' + (currentUser ? currentUser.username : 'Guest'));
+                    window.location.href = 'account.html';
                     break;
                 case 'orders':
                     alert('Orders page would open here.\n\nShowing order history for: ' + (currentUser ? currentUser.username : 'Guest'));

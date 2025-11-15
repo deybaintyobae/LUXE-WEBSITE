@@ -181,5 +181,128 @@ class User {
         
         return null;
     }
+    
+    // Update user profile
+    public function updateProfile($user_id, $full_name = null, $email = null) {
+        try {
+            // Check if email is already taken by another user
+            if ($email) {
+                $query = "SELECT id FROM {$this->table} 
+                          WHERE email = :email AND id != :user_id LIMIT 1";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':user_id', $user_id);
+                $stmt->execute();
+                
+                if ($stmt->rowCount() > 0) {
+                    return [
+                        'success' => false,
+                        'message' => 'Email is already in use by another account'
+                    ];
+                }
+            }
+            
+            // Build update query
+            $updates = [];
+            $params = [':user_id' => $user_id];
+            
+            if ($full_name !== null) {
+                $updates[] = "full_name = :full_name";
+                $params[':full_name'] = $full_name;
+            }
+            
+            if ($email !== null) {
+                $updates[] = "email = :email";
+                $params[':email'] = $email;
+            }
+            
+            if (empty($updates)) {
+                return [
+                    'success' => false,
+                    'message' => 'No fields to update'
+                ];
+            }
+            
+            $query = "UPDATE {$this->table} SET " . implode(', ', $updates) . " WHERE id = :user_id";
+            $stmt = $this->conn->prepare($query);
+            
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+            
+            if ($stmt->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Profile updated successfully'
+                ];
+            }
+            
+            return [
+                'success' => false,
+                'message' => 'Failed to update profile'
+            ];
+            
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    // Change password
+    public function changePassword($user_id, $current_password, $new_password) {
+        try {
+            // Get current password hash
+            $query = "SELECT password FROM {$this->table} WHERE id = :id LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $user_id);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() === 0) {
+                return [
+                    'success' => false,
+                    'message' => 'User not found'
+                ];
+            }
+            
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Verify current password
+            if (!password_verify($current_password, $row['password'])) {
+                return [
+                    'success' => false,
+                    'message' => 'Current password is incorrect'
+                ];
+            }
+            
+            // Hash new password
+            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 12]);
+            
+            // Update password
+            $query = "UPDATE {$this->table} SET password = :password WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':password', $hashed_password);
+            $stmt->bindParam(':id', $user_id);
+            
+            if ($stmt->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Password changed successfully'
+                ];
+            }
+            
+            return [
+                'success' => false,
+                'message' => 'Failed to change password'
+            ];
+            
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
 }
 ?>
