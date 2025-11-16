@@ -790,6 +790,197 @@
         .add-to-cart-quick:hover {
             background: #333333;
         }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+        
+        .checkout-modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        
+        .checkout-container {
+            background: #fff;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 16px;
+            margin: auto;
+        }
+        
+        .checkout-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .checkout-close {
+            width: 40px;
+            height: 40px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .checkout-close:hover {
+            background: #e0e0e0;
+        }
+        
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #999;
+        }
+        
+        .step.active {
+            color: #000;
+        }
+        
+        .step.completed .step-number {
+            background: #26de81;
+            color: #fff;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .step.active .step-number {
+            background: #000;
+            color: #fff;
+        }
+        
+        .checkout-content {
+            padding: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #000000;
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .payment-methods {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .payment-method {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: #000;
+        }
+        
+        .payment-method.active {
+            border-color: #000;
+            background: #f5f5f5;
+        }
+        
+        .payment-method input {
+            display: none;
+        }
+        
+        .payment-method-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .card-details {
+            margin-top: 1.5rem;
+        }
+        
+        .order-summary {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 1rem 0;
+        }
         
         /* Responsive */
         @media (max-width: 767px) {
@@ -800,6 +991,10 @@
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1089,6 +1284,144 @@
             <button class="checkout-btn" id="checkoutBtn">Checkout</button>
         </div>
     </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="checkout-modal">
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h2>Checkout</h2>
+                <button class="checkout-close" onclick="closeCheckout()">×</button>
+            </div>
+            
+            <div class="checkout-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Shipping</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Payment</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Review</div>
+                </div>
+            </div>
+            
+            <div class="checkout-content">
+                <!-- Step 1: Shipping -->
+                <div id="step1" class="checkout-step-content">
+                    <h3>Shipping Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" id="firstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" id="lastName" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone *</label>
+                        <input type="tel" id="phone" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address *</label>
+                        <input type="text" id="address" class="form-input" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">City *</label>
+                            <input type="text" id="city" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Postal Code *</label>
+                            <input type="text" id="postal" class="form-input" required>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="nextStep(2)">Continue to Payment</button>
+                </div>
+                
+                <!-- Step 2: Payment -->
+                <div id="step2" class="checkout-step-content" style="display: none;">
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <label class="payment-method active">
+                            <input type="radio" name="payment" value="card" checked>
+                            <div class="payment-method-content">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                                <span>Credit Card</span>
+                            </div>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="payment" value="paypal">
+                            <div class="payment-method-content">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .759-.652h7.638c3.383 0 5.545 1.551 5.545 4.05 0 2.45-1.917 4.551-5.014 4.551H9.816l-1.344 7.638a.641.641 0 0 1-.633.74zm12.133-8.337c1.917 0 3.383-.85 3.383-2.45 0-1.2-.633-2.2-2.1-2.2h-2.35l-1.05 5.95h2.117z"/>
+                                </svg>
+                                <span>PayPal</span>
+                            </div>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="payment" value="gcash">
+                            <div class="payment-method-content">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                                </svg>
+                                <span>GCash</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div id="cardDetails" class="card-details">
+                        <div class="form-group">
+                            <label class="form-label">Card Number *</label>
+                            <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Expiry Date *</label>
+                                <input type="text" id="expiry" class="form-input" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CVV *</label>
+                                <input type="text" id="cvv" class="form-input" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cardholder Name *</label>
+                            <input type="text" id="cardName" class="form-input" placeholder="Name on card">
+                        </div>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn-secondary" style="flex: 1;" onclick="prevStep(1)">Back</button>
+                        <button class="btn-primary" style="flex: 2;" onclick="nextStep(3)">Continue to Review</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Review -->
+                <div id="step3" class="checkout-step-content" style="display: none;">
+                    <h3>Order Summary</h3>
+                    <div id="orderSummary" class="order-summary"></div>
+                    <div class="order-total">
+                        <span>Total:</span>
+                        <span id="finalTotal">$0</span>
+                    </div>
+                    <div class="btn-group" style="margin-top: 1rem;">
+                        <button class="btn-secondary" style="flex: 1;" onclick="prevStep(2)">Back</button>
+                        <button class="btn-primary btn-place-order" style="flex: 2;" onclick="placeOrder()">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Hero Section -->
     <section class="hero" id="hero">
@@ -1271,8 +1604,9 @@
             <p>Made with ❤️ for luxury fashion enthusiasts</p>
         </div>
     </div>
-</footer>
+    </footer>
     
+    <script src="js/checkout.js"></script>
     <script>
         // Sample product data
         const products = {
@@ -1310,6 +1644,7 @@
         
         let cart = [];
         let currentUser = null;
+        let wishlistItems = [];
         const API_BASE_URL = './api';
         
         // Initialize page
@@ -1329,6 +1664,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             checkAuthStatus();
             setupEventListeners();
+            loadWishlist();
         });
         
         // Render products
@@ -1355,8 +1691,17 @@
                             </svg>
                         </button>
                     </div>
+                    <div class="product-info">
+                        <div class="product-brand">${product.brand}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${product.price}</div>
+                        <button class="add-to-cart-quick" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
                 </div>
             `).join('');
+            
+            // Update wishlist UI after rendering
+            updateWishlistUI();
         }
         
         // Cart functionality
@@ -1423,7 +1768,7 @@
                         </div>
                         <div class="cart-item-details">
                             <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-price">${item.price * item.quantity}</div>
+                            <div class="cart-item-price">${(item.price * item.quantity).toFixed(2)}</div>
                             <div class="cart-item-quantity">
                                 <button class="cart-quantity-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
                                 <span>${item.quantity}</span>
@@ -1435,11 +1780,10 @@
                 `).join('');
             }
             
-            cartTotal.textContent = '$' + totalPrice.toFixed(2);
-        }
+        cartTotal.textContent = '$' + totalPrice.toFixed(2);
+    }
 
-        let wishlistItems = [];
-
+        // Wishlist functionality
         async function loadWishlist() {
             if (!currentUser) return;
             
@@ -1506,12 +1850,6 @@
                 }
             });
         }
-
-        // Load wishlist on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // ... existing code ...
-            loadWishlist();
-        });
         
         function saveCart() {
             localStorage.setItem('luxe_cart', JSON.stringify(cart));
@@ -1641,10 +1979,10 @@
                     window.location.href = 'account.html';
                     break;
                 case 'orders':
-                    alert('Orders page would open here.\n\nShowing order history for: ' + (currentUser ? currentUser.username : 'Guest'));
+                    window.location.href = 'account.html?section=orders';
                     break;
                 case 'wishlist':
-                    alert('Wishlist page would open here.\n\nShowing saved items for: ' + (currentUser ? currentUser.username : 'Guest'));
+                    window.location.href = 'account.html?section=wishlist';
                     break;
             }
         }
@@ -1671,6 +2009,7 @@
                 if (data.logged_in && data.user) {
                     currentUser = data.user;
                     showLoggedInState(data.user);
+                    loadWishlist();
                 } else {
                     showLoggedOutState();
                 }
@@ -1740,6 +2079,7 @@
                 
                 if (data.success) {
                     currentUser = null;
+                    wishlistItems = [];
                     showNotification('Logged out successfully');
                     showLoggedOutState();
                     setTimeout(() => {
@@ -1788,18 +2128,5 @@
             }, 3000);
         }
     </script>
-    
-    <!-- Include checkout modal -->
-<div id="checkoutModalContainer"></div>
-<script>
-    // Load checkout modal
-    fetch('checkout.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('checkoutModalContainer').innerHTML = html;
-        });
-</script>
-<script src="/js/checkout.js"></script>
-
 </body>
 </html>
