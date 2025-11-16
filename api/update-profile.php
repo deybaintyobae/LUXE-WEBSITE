@@ -41,6 +41,8 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 $full_name = isset($input['full_name']) ? trim($input['full_name']) : null;
 $email = isset($input['email']) ? trim($input['email']) : null;
+$phone = isset($input['phone']) ? trim($input['phone']) : null;
+$address = isset($input['address']) ? trim($input['address']) : null;
 
 // Validate email
 if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -54,7 +56,7 @@ if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 try {
     $user = new User();
-    $result = $user->updateProfile($_SESSION['user_id'], $full_name, $email);
+    $result = $user->updateProfile($_SESSION['user_id'], $full_name, $email, $phone, $address);
     
     if ($result['success']) {
         // Update session email if changed

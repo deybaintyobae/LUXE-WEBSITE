@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account | LUXE</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -48,20 +44,12 @@
         .brand-logo {
             width: 50px;
             height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffffff;
         }
         
         .brand {
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: 0.1em;
-            color: #000000;
-            text-decoration: none;
         }
         
         .main-container {
@@ -241,30 +229,30 @@
         }
 
         .order-card {
-        background: #f5f5f5;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .order-header {
-        display: flex;
-        justify-content: space-between;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #e0e0e0;
-        margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 1rem;
         }
 
         .order-number {
-        font-weight: 600;
-        font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .order-status {
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
 
         .order-status.pending { background: #fff3cd; color: #856404; }
@@ -273,22 +261,22 @@
         .order-status.delivered { background: #26de81; color: #fff; }
 
         .order-items {
-        margin: 1rem 0;
+            margin: 1rem 0;
         }
 
         .order-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
         }
 
         .order-total-row {
-        display: flex;
-        justify-content: space-between;
-        font-weight: 600;
-        font-size: 1.2rem;
-        padding-top: 1rem;
-        border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
         }
         
         .info-card {
@@ -361,6 +349,61 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            position: relative;
+            width: 100%;
+            padding-top: 133%;
+            background: #f5f5f5;
+        }
+
+        .product-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-brand {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
         
         @media (max-width: 768px) {
             .account-grid {
@@ -423,6 +466,12 @@
                             <path d="M7.68 6h8.64a2 2 0 0 1 1.95 2.38l-1.2 6A2 2 0 0 1 15.13 16H8.87a2 2 0 0 1-1.94-1.62l-1.2-6A2 2 0 0 1 7.68 6Z"></path>
                         </svg>
                         Order History
+                    </a>
+                    <a class="menu-item" data-section="wishlist">
+                        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        Wishlist
                     </a>
                     <a class="menu-item" href="index.html">
                         <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -530,8 +579,8 @@
     
                     <div id="ordersLoading" class="loading">
                         <div class="loading-spinner"></div>
-                            <p>Loading orders...</p>
-                        </div>
+                        <p>Loading orders...</p>
+                    </div>
     
                     <div id="ordersContainer"></div>
     
@@ -569,13 +618,52 @@
     </div>
     
     <script>
+        // Product data (same as index.html)
+        const products = {
+            newArrivals: [
+                { id: 1, name: 'Silk Evening Dress', brand: 'DESIGNER NAME', price: 1299, image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600', badge: 'NEW' },
+                { id: 2, name: 'Leather Handbag', brand: 'LUXURY BRAND', price: 899, image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600', badge: 'NEW' },
+                { id: 3, name: 'Tailored Blazer', brand: 'HAUTE COUTURE', price: 1599, image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600', badge: 'NEW' },
+                { id: 4, name: 'Classic Heels', brand: 'DESIGNER SHOES', price: 799, image: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=600', badge: 'NEW' },
+            ],
+            women: [
+                { id: 5, name: 'Cashmere Sweater', brand: 'PREMIUM WEAR', price: 699, image: 'https://images.unsplash.com/photo-1624206112918-f140f087f9b5?w=600' },
+                { id: 6, name: 'Designer Coat', brand: 'ELITE FASHION', price: 1899, image: 'https://images.unsplash.com/photo-1539533113208-f6df8cc8b543?w=600' },
+                { id: 7, name: 'Silk Blouse', brand: 'LUXURY LINE', price: 599, image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600' },
+                { id: 8, name: 'Pencil Skirt', brand: 'HAUTE COUTURE', price: 499, image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=600' },
+            ],
+            men: [
+                { id: 9, name: 'Suit Jacket', brand: 'GENTLEMAN', price: 1299, image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600' },
+                { id: 10, name: 'Dress Shirt', brand: 'PREMIUM MEN', price: 299, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600' },
+                { id: 11, name: 'Leather Shoes', brand: 'ELITE MEN', price: 899, image: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=600' },
+                { id: 12, name: 'Wool Coat', brand: 'LUXURY MEN', price: 1599, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600' },
+            ],
+            accessories: [
+                { id: 13, name: 'Designer Sunglasses', brand: 'ELITE FASHION', price: 399, image: 'https://images.unsplash.com/photo-1598522325074-042db73aa4e6?w=600' },
+                { id: 14, name: 'Evening Clutch', brand: 'LUXURY LINE', price: 499, image: 'https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=600' },
+                { id: 15, name: 'Silk Scarf', brand: 'SIGNATURE STYLE', price: 299, image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600' },
+                { id: 16, name: 'Leather Belt', brand: 'PREMIUM GEAR', price: 199, image: 'https://images.unsplash.com/photo-1624222247344-550fb60583f0?w=600' },
+            ],
+            sale: [
+                { id: 17, name: 'Summer Dress', brand: 'DESIGNER NAME', price: 699, originalPrice: 999, image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600', badge: 'SALE' },
+                { id: 18, name: 'Leather Jacket', brand: 'LUXURY BRAND', price: 899, originalPrice: 1299, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600', badge: 'SALE' },
+                { id: 19, name: 'Designer Bag', brand: 'HAUTE COUTURE', price: 599, originalPrice: 899, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600', badge: 'SALE' },
+                { id: 20, name: 'Ankle Boots', brand: 'DESIGNER SHOES', price: 399, originalPrice: 599, image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600', badge: 'SALE' },
+            ]
+        };
+
         const API_BASE_URL = './api';
         let currentUser = null;
         
-        // Check authentication on load
         document.addEventListener('DOMContentLoaded', async function() {
             await checkAuth();
             setupEventListeners();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            if (section) {
+                switchSection(section);
+            }
         });
         
         async function checkAuth() {
@@ -658,6 +746,10 @@
         }
 
         async function loadWishlistPage() {
+            document.getElementById('wishlistLoading').style.display = 'block';
+            document.getElementById('wishlistGrid').innerHTML = '';
+            document.getElementById('wishlistEmpty').style.display = 'none';
+            
             try {
                 const response = await fetch(`${API_BASE_URL}/wishlist.php`, {
                     method: 'GET',
@@ -681,10 +773,8 @@
         }
 
         function displayWishlist(wishlist) {
-            // Get all products
             const allProducts = [...products.newArrivals, ...products.women, ...products.men, ...products.accessories, ...products.sale];
             
-            // Filter products in wishlist
             const wishlistProducts = wishlist.map(item => {
                 return allProducts.find(p => p.id === item.product_id);
             }).filter(p => p);
@@ -698,9 +788,8 @@
                     <div class="product-info">
                         <div class="product-brand">${product.brand}</div>
                         <div class="product-name">${product.name}</div>
-                        <div class="product-price">$${product.price}</div>
-                        <button class="add-to-cart-quick" onclick="addToCart(${product.id})">Add to Cart</button>
-                        <button class="btn-secondary" style="margin-top: 0.5rem; width: 100%; padding: 0.75rem; border: none; border-radius: 8px; cursor: pointer;" onclick="removeFromWishlistPage(${product.id})">Remove</button>
+                        <div class="product-price">${product.price}</div>
+                        <button class="btn btn-secondary" style="width: 100%; padding: 0.75rem; margin-top: 0.5rem;" onclick="removeFromWishlistPage(${product.id})">Remove</button>
                     </div>
                 </div>
             `).join('');
@@ -721,22 +810,14 @@
                 
                 if (data.success) {
                     loadWishlistPage();
+                    showAlert('wishlistAlertBox', 'Removed from wishlist', 'success');
                 }
             } catch (error) {
                 console.error('Remove wishlist error:', error);
             }
         }
-
-        // Update switchSection to load wishlist
-        function switchSection(section) {
-            // ... existing code ...
-            if (section === 'wishlist') {
-                loadWishlistPage();
-            }
-        }
         
         function setupEventListeners() {
-            // Menu navigation
             document.querySelectorAll('.menu-item[data-section]').forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -745,13 +826,11 @@
                 });
             });
             
-            // Profile form
             document.getElementById('profileForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 await updateProfile();
             });
             
-            // Password form
             document.getElementById('passwordForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 await changePassword();
@@ -763,13 +842,22 @@
                 item.classList.remove('active');
             });
             
-            document.querySelector(`.menu-item[data-section="${section}"]`).classList.add('active');
+            const menuItem = document.querySelector(`.menu-item[data-section="${section}"]`);
+            if (menuItem) {
+                menuItem.classList.add('active');
+            }
             
             document.querySelectorAll('.content-section').forEach(sec => {
                 sec.style.display = 'none';
             });
             
             document.getElementById(section + 'Section').style.display = 'block';
+            
+            if (section === 'orders') {
+                loadOrders();
+            } else if (section === 'wishlist') {
+                loadWishlistPage();
+            }
         }
         
         async function updateProfile() {
@@ -801,12 +889,12 @@
                 if (data.success) {
                     showAlert('alertBox', 'Profile updated successfully!', 'success');
                     
-                    // Update sidebar
                     document.getElementById('sidebarEmail').textContent = formData.email;
                     
-                    // Update current user
                     currentUser.email = formData.email;
                     currentUser.full_name = formData.full_name;
+                    currentUser.phone = formData.phone;
+                    currentUser.address = formData.address;
                 } else {
                     showAlert('alertBox', data.message || 'Failed to update profile', 'error');
                 }
@@ -820,6 +908,10 @@
         }
 
         async function loadOrders() {
+            document.getElementById('ordersLoading').style.display = 'block';
+            document.getElementById('ordersContainer').innerHTML = '';
+            document.getElementById('ordersEmpty').style.display = 'none';
+            
             try {
                 const response = await fetch(`${API_BASE_URL}/get-orders.php`, {
                     method: 'GET',
@@ -854,27 +946,19 @@
                         ${order.items.map(item => `
                             <div class="order-item">
                                 <span>${item.name} x${item.quantity}</span>
-                                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                                <span>${(item.price * item.quantity).toFixed(2)}</span>
                             </div>
                         `).join('')}
                     </div>
                     <div class="order-total-row">
                         <span>Total</span>
-                        <span>$${parseFloat(order.total_amount).toFixed(2)}</span>
+                        <span>${parseFloat(order.total_amount).toFixed(2)}</span>
                     </div>
                     <div style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
                         Ordered on ${formatDate(order.created_at)}
                     </div>
                 </div>
             `).join('');
-        }
-
-        // Call when orders section is opened
-        function switchSection(section) {
-            // ... existing code ...
-            if (section === 'orders') {
-                loadOrders();
-            }
         }
         
         async function changePassword() {
@@ -930,6 +1014,8 @@
         
         function showAlert(boxId, message, type) {
             const alertBox = document.getElementById(boxId);
+            if (!alertBox) return;
+            
             alertBox.textContent = message;
             alertBox.className = 'alert show alert-' + type;
             
