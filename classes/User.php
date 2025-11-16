@@ -4,12 +4,15 @@ require_once __DIR__ . '/../config/database.php';
 class User {
     private $conn;
     private $table = 'users';
+    private $reset_table = 'password_resets';
 
     public $id;
     public $username;
     public $email;
     public $password;
     public $full_name;
+    public $phone;
+    public $address;
     public $created_at;
     public $last_login;
     public $is_active;
@@ -22,7 +25,6 @@ class User {
     // Register new user
     public function register($username, $email, $password, $full_name = null) {
         try {
-            // Check if username or email already exists
             if ($this->userExists($username, $email)) {
                 return [
                     'success' => false,
@@ -30,7 +32,6 @@ class User {
                 ];
             }
 
-            // Validate input
             if (!$this->validateInput($username, $email, $password)) {
                 return [
                     'success' => false,
@@ -38,10 +39,8 @@ class User {
                 ];
             }
 
-            // Hash password
             $hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-            // Insert user
             $query = "INSERT INTO {$this->table} (username, email, password, full_name) 
                         VALUES (:username, :email, :password, :full_name)";
             
@@ -72,32 +71,24 @@ class User {
         }
     }
 
-    // Login user - FIXED VERSION
+    // Login user
     public function login($username_or_email, $password) {
         try {
-            // FIXED: Use two separate parameters for username and email
             $query = "SELECT * FROM {$this->table} 
                       WHERE (username = :username OR email = :email) 
                       AND is_active = 1 
                       LIMIT 1";
             
             $stmt = $this->conn->prepare($query);
-            
-            // Bind both parameters with the same value
             $stmt->bindParam(':username', $username_or_email);
             $stmt->bindParam(':email', $username_or_email);
-            
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 
-                // Verify password
                 if (password_verify($password, $row['password'])) {
-                    // Update last login
                     $this->updateLastLogin($row['id']);
-                    
-                    // Remove password from returned data
                     unset($row['password']);
                     
                     return [
@@ -137,24 +128,18 @@ class User {
 
     // Validate input
     private function validateInput($username, $email, $password) {
-        // Username validation
         if (strlen($username) < 3 || strlen($username) > 50) {
             return false;
         }
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
             return false;
         }
-
-        // Email validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
-
-        // Password validation
         if (strlen($password) < 8) {
             return false;
         }
-
         return true;
     }
 
@@ -168,7 +153,7 @@ class User {
 
     // Get user by ID
     public function getUserById($user_id) {
-        $query = "SELECT id, username, email, full_name, created_at, last_login 
+        $query = "SELECT id, username, email, full_name, phone, address, created_at, last_login 
                   FROM {$this->table} WHERE id = :id AND is_active = 1 LIMIT 1";
         
         $stmt = $this->conn->prepare($query);
@@ -183,9 +168,8 @@ class User {
     }
     
     // Update user profile
-    public function updateProfile($user_id, $full_name = null, $email = null) {
+    public function updateProfile($user_id, $full_name = null, $email = null, $phone = null, $address = null) {
         try {
-            // Check if email is already taken by another user
             if ($email) {
                 $query = "SELECT id FROM {$this->table} 
                           WHERE email = :email AND id != :user_id LIMIT 1";
@@ -202,7 +186,6 @@ class User {
                 }
             }
             
-            // Build update query
             $updates = [];
             $params = [':user_id' => $user_id];
             
@@ -214,6 +197,16 @@ class User {
             if ($email !== null) {
                 $updates[] = "email = :email";
                 $params[':email'] = $email;
+            }
+            
+            if ($phone !== null) {
+                $updates[] = "phone = :phone";
+                $params[':phone'] = $phone;
+            }
+            
+            if ($address !== null) {
+                $updates[] = "address = :address";
+                $params[':address'] = $address;
             }
             
             if (empty($updates)) {
@@ -253,7 +246,6 @@ class User {
     // Change password
     public function changePassword($user_id, $current_password, $new_password) {
         try {
-            // Get current password hash
             $query = "SELECT password FROM {$this->table} WHERE id = :id LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id', $user_id);
@@ -268,7 +260,6 @@ class User {
             
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Verify current password
             if (!password_verify($current_password, $row['password'])) {
                 return [
                     'success' => false,
@@ -276,10 +267,8 @@ class User {
                 ];
             }
             
-            // Hash new password
             $hashed_password = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 12]);
             
-            // Update password
             $query = "UPDATE {$this->table} SET password = :password WHERE id = :id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':password', $hashed_password);
@@ -295,6 +284,105 @@ class User {
             return [
                 'success' => false,
                 'message' => 'Failed to change password'
+            ];
+            
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    // Forgot password
+    public function forgotPassword($email) {
+        try {
+            $query = "SELECT id, username, email FROM {$this->table} 
+                      WHERE email = :email AND is_active = 1 LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() === 0) {
+                // Don't reveal if email exists for security
+                return [
+                    'success' => true,
+                    'message' => 'If the email exists, a reset token has been sent'
+                ];
+            }
+            
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Generate reset token
+            $token = bin2hex(random_bytes(32));
+            $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
+            
+            // Store token in database
+            $query = "INSERT INTO {$this->reset_table} (user_id, token, expires_at) 
+                      VALUES (:user_id, :token, :expires_at)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':user_id', $user['id']);
+            $stmt->bindParam(':token', $token);
+            $stmt->bindParam(':expires_at', $expires);
+            $stmt->execute();
+            
+            // In production, send email here
+            // For testing, return token in console
+            error_log("Password reset token for {$email}: {$token}");
+            
+            return [
+                'success' => true,
+                'message' => 'If the email exists, a reset token has been sent',
+                'token' => $token // Remove this in production!
+            ];
+            
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    // Reset password
+    public function resetPassword($token, $new_password) {
+        try {
+            // Validate token
+            $query = "SELECT user_id FROM {$this->reset_table} 
+                      WHERE token = :token AND expires_at > NOW() AND used = 0 
+                      LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() === 0) {
+                return [
+                    'success' => false,
+                    'message' => 'Invalid or expired reset token'
+                ];
+            }
+            
+            $reset = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user_id = $reset['user_id'];
+            
+            // Update password
+            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 12]);
+            
+            $query = "UPDATE {$this->table} SET password = :password WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':password', $hashed_password);
+            $stmt->bindParam(':id', $user_id);
+            $stmt->execute();
+            
+            // Mark token as used
+            $query = "UPDATE {$this->reset_table} SET used = 1 WHERE token = :token";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+            
+            return [
+                'success' => true,
+                'message' => 'Password reset successful'
             ];
             
         } catch (PDOException $e) {

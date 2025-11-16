@@ -239,6 +239,57 @@
             gap: 1rem;
             margin-top: 2rem;
         }
+
+        .order-card {
+        background: #f5f5f5;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        }
+
+        .order-header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 1rem;
+        }
+
+        .order-number {
+        font-weight: 600;
+        font-size: 1.1rem;
+        }
+
+        .order-status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        }
+
+        .order-status.pending { background: #fff3cd; color: #856404; }
+        .order-status.processing { background: #d1ecf1; color: #0c5460; }
+        .order-status.shipped { background: #d4edda; color: #155724; }
+        .order-status.delivered { background: #26de81; color: #fff; }
+
+        .order-items {
+        margin: 1rem 0;
+        }
+
+        .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        }
+
+        .order-total-row {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1.2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e0e0e0;
+        }
         
         .info-card {
             background: #f5f5f5;
@@ -412,6 +463,16 @@
                             <label class="form-label">Email Address</label>
                             <input type="email" class="form-input" id="email" placeholder="your@email.com">
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" id="phone" placeholder="Enter your phone number">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-input" id="address" rows="3" placeholder="Enter your full address" style="resize: vertical;"></textarea>
+                        </div>
                         
                         <div class="info-card">
                             <div class="info-row">
@@ -466,14 +527,43 @@
                     <div class="content-header">
                         <h2 class="content-title">Order History</h2>
                     </div>
-                    
-                    <div class="info-card">
+    
+                    <div id="ordersLoading" class="loading">
+                        <div class="loading-spinner"></div>
+                            <p>Loading orders...</p>
+                        </div>
+    
+                    <div id="ordersContainer"></div>
+    
+                    <div id="ordersEmpty" class="info-card" style="display: none;">
                         <p style="text-align: center; padding: 2rem; color: #666666;">
                             You haven't placed any orders yet.<br>
                             <a href="index.html" style="color: #000000; font-weight: 600; text-decoration: none;">Start shopping</a>
                         </p>
                     </div>
                 </div>
+
+                <!-- Wishlist Section -->
+                <div id="wishlistSection" class="content-section" style="display: none;">
+                    <div class="content-header">
+                        <h2 class="content-title">My Wishlist</h2>
+                    </div>
+                    
+                    <div id="wishlistLoading" class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading wishlist...</p>
+                    </div>
+                    
+                    <div id="wishlistGrid" class="products-grid"></div>
+                    
+                    <div id="wishlistEmpty" class="info-card" style="display: none;">
+                        <p style="text-align: center; padding: 2rem; color: #666666;">
+                            Your wishlist is empty.<br>
+                            <a href="index.html" style="color: #000000; font-weight: 600; text-decoration: none;">Browse products</a>
+                        </p>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
@@ -544,6 +634,8 @@
             document.getElementById('username').value = user.username;
             document.getElementById('fullName').value = user.full_name || '';
             document.getElementById('email').value = user.email;
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('address').value = user.address || '';
             
             if (user.created_at) {
                 document.getElementById('createdAt').textContent = formatDate(user.created_at);
@@ -563,6 +655,84 @@
                 hour: '2-digit',
                 minute: '2-digit'
             });
+        }
+
+        async function loadWishlistPage() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/wishlist.php`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('wishlistLoading').style.display = 'none';
+                
+                if (data.success && data.wishlist && data.wishlist.length > 0) {
+                    displayWishlist(data.wishlist);
+                } else {
+                    document.getElementById('wishlistEmpty').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Load wishlist error:', error);
+                document.getElementById('wishlistLoading').style.display = 'none';
+                document.getElementById('wishlistEmpty').style.display = 'block';
+            }
+        }
+
+        function displayWishlist(wishlist) {
+            // Get all products
+            const allProducts = [...products.newArrivals, ...products.women, ...products.men, ...products.accessories, ...products.sale];
+            
+            // Filter products in wishlist
+            const wishlistProducts = wishlist.map(item => {
+                return allProducts.find(p => p.id === item.product_id);
+            }).filter(p => p);
+            
+            const grid = document.getElementById('wishlistGrid');
+            grid.innerHTML = wishlistProducts.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">${product.brand}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">$${product.price}</div>
+                        <button class="add-to-cart-quick" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="btn-secondary" style="margin-top: 0.5rem; width: 100%; padding: 0.75rem; border: none; border-radius: 8px; cursor: pointer;" onclick="removeFromWishlistPage(${product.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function removeFromWishlistPage(productId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/wishlist.php`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ product_id: productId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadWishlistPage();
+                }
+            } catch (error) {
+                console.error('Remove wishlist error:', error);
+            }
+        }
+
+        // Update switchSection to load wishlist
+        function switchSection(section) {
+            // ... existing code ...
+            if (section === 'wishlist') {
+                loadWishlistPage();
+            }
         }
         
         function setupEventListeners() {
@@ -611,7 +781,9 @@
             
             const formData = {
                 full_name: document.getElementById('fullName').value.trim(),
-                email: document.getElementById('email').value.trim()
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim()
             };
             
             try {
@@ -644,6 +816,64 @@
             } finally {
                 saveBtn.disabled = false;
                 saveBtn.textContent = originalText;
+            }
+        }
+
+        async function loadOrders() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/get-orders.php`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('ordersLoading').style.display = 'none';
+                
+                if (data.success && data.orders && data.orders.length > 0) {
+                    displayOrders(data.orders);
+                } else {
+                    document.getElementById('ordersEmpty').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Load orders error:', error);
+                document.getElementById('ordersLoading').style.display = 'none';
+                document.getElementById('ordersEmpty').style.display = 'block';
+            }
+        }
+
+        function displayOrders(orders) {
+            const container = document.getElementById('ordersContainer');
+            container.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-number">${order.order_number}</div>
+                        <div class="order-status ${order.status}">${order.status.toUpperCase()}</div>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <span>${item.name} x${item.quantity}</span>
+                                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-total-row">
+                        <span>Total</span>
+                        <span>$${parseFloat(order.total_amount).toFixed(2)}</span>
+                    </div>
+                    <div style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                        Ordered on ${formatDate(order.created_at)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Call when orders section is opened
+        function switchSection(section) {
+            // ... existing code ...
+            if (section === 'orders') {
+                loadOrders();
             }
         }
         
