@@ -75,9 +75,9 @@ class User {
     public function login($username_or_email, $password) {
         try {
             $query = "SELECT * FROM {$this->table} 
-                      WHERE (username = :username OR email = :email) 
-                      AND is_active = 1 
-                      LIMIT 1";
+                        WHERE (username = :username OR email = :email) 
+                        AND is_active = 1 
+                        LIMIT 1";
             
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':username', $username_or_email);
@@ -115,8 +115,8 @@ class User {
     // Check if user exists
     private function userExists($username, $email) {
         $query = "SELECT id FROM {$this->table} 
-                  WHERE username = :username OR email = :email 
-                  LIMIT 1";
+                    WHERE username = :username OR email = :email 
+                    LIMIT 1";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $username);
@@ -154,7 +154,7 @@ class User {
     // Get user by ID
     public function getUserById($user_id) {
         $query = "SELECT id, username, email, full_name, phone, address, created_at, last_login 
-                  FROM {$this->table} WHERE id = :id AND is_active = 1 LIMIT 1";
+                    FROM {$this->table} WHERE id = :id AND is_active = 1 LIMIT 1";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $user_id);
@@ -172,7 +172,7 @@ class User {
         try {
             if ($email) {
                 $query = "SELECT id FROM {$this->table} 
-                          WHERE email = :email AND id != :user_id LIMIT 1";
+                            WHERE email = :email AND id != :user_id LIMIT 1";
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':user_id', $user_id);
@@ -298,7 +298,7 @@ class User {
     public function forgotPassword($email) {
         try {
             $query = "SELECT id, username, email FROM {$this->table} 
-                      WHERE email = :email AND is_active = 1 LIMIT 1";
+                    WHERE email = :email AND is_active = 1 LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':email', $email);
             $stmt->execute();
@@ -319,7 +319,7 @@ class User {
             
             // Store token in database
             $query = "INSERT INTO {$this->reset_table} (user_id, token, expires_at) 
-                      VALUES (:user_id, :token, :expires_at)";
+                    VALUES (:user_id, :token, :expires_at)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':user_id', $user['id']);
             $stmt->bindParam(':token', $token);
@@ -349,8 +349,8 @@ class User {
         try {
             // Validate token
             $query = "SELECT user_id FROM {$this->reset_table} 
-                      WHERE token = :token AND expires_at > NOW() AND used = 0 
-                      LIMIT 1";
+                        WHERE token = :token AND expires_at > NOW() AND used = 0 
+                        LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':token', $token);
             $stmt->execute();

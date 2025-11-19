@@ -15,7 +15,7 @@ class Wishlist {
         try {
             // Check if already in wishlist
             $query = "SELECT id FROM {$this->table} 
-                      WHERE user_id = :user_id AND product_id = :product_id LIMIT 1";
+                        WHERE user_id = :user_id AND product_id = :product_id LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':product_id', $product_id);
@@ -30,7 +30,7 @@ class Wishlist {
             
             // Add to wishlist
             $query = "INSERT INTO {$this->table} (user_id, product_id) 
-                      VALUES (:user_id, :product_id)";
+                        VALUES (:user_id, :product_id)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':product_id', $product_id);
@@ -59,7 +59,7 @@ class Wishlist {
     public function removeFromWishlist($user_id, $product_id) {
         try {
             $query = "DELETE FROM {$this->table} 
-                      WHERE user_id = :user_id AND product_id = :product_id";
+                        WHERE user_id = :user_id AND product_id = :product_id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':user_id', $user_id);
             $stmt->bindParam(':product_id', $product_id);
@@ -87,7 +87,7 @@ class Wishlist {
     // Get wishlist
     public function getWishlist($user_id) {
         $query = "SELECT product_id, created_at FROM {$this->table} 
-                  WHERE user_id = :user_id ORDER BY created_at DESC";
+                    WHERE user_id = :user_id ORDER BY created_at DESC";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -99,7 +99,7 @@ class Wishlist {
     // Check if in wishlist
     public function isInWishlist($user_id, $product_id) {
         $query = "SELECT id FROM {$this->table} 
-                  WHERE user_id = :user_id AND product_id = :product_id LIMIT 1";
+                    WHERE user_id = :user_id AND product_id = :product_id LIMIT 1";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
